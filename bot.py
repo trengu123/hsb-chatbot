@@ -33,7 +33,7 @@ Thông tin trường:
 
 def ask_bot(messages: list):
     response = client.chat.completions.create(
-        model="gpt-4.1-mini",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPT},
             *messages
