@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<title>Trợ lý tuyển sinh HSB</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f2f4f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .chat-container {
+        width: 900px;
+        height: 500px;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .chat-header {
+        background: linear-gradient(135deg, #1e88e5, #42a5f5);
+        color: #fff;
+        padding: 14px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .chat-box {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;   /* khoảng cách giữa các tin */
+        flex: 1;
+        padding: 15px;
+        overflow-y: auto;
+        background: #f7f9fc;
+    }
+
+    .message {
+    display: inline-block;   /* 👈 QUAN TRỌNG */
+    width: fit-content;      /* 👈 co theo chữ */
+    max-width: 70%;
+    margin-bottom: 12px;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+    word-wrap: break-word;
+}
+
+    .user {
+        background: #1e88e5;
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+    }
+
+    .bot {
+        background: #e4e7eb;
+        color: #333;
+        margin-right: auto;
+        border-bottom-left-radius: 4px;
+    }
+
+    .chat-input {
+        display: flex;
+        padding: 10px;
+        border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+        flex: 1;
+        padding: 10px;
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        outline: none;
+    }
+
+    .chat-input button {
+        margin-left: 8px;
+        padding: 10px 18px;
+        border-radius: 20px;
+        border: none;
+        background: #1e88e5;
+        color: white;
+        cursor: pointer;
+        font-weight: bold;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        🎓 Trợ lý tuyển sinh AI – HSB
+    </div>
+
+    <div class="chat-box" id="chatBox">
+        <div class="message bot">
+            Chào bạn 👋 Mình là Trợ lý tuyển sinh AI của HSB. Bạn hãy chia sẻ điểm số, sở thích, đam mê hoặc điểm mạnh để mình tư vấn ngành học phù hợp nhé!
+        </div>
+    </div>
+
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Nhập tin nhắn..." />
+        <button onclick="sendMessage()">Gửi</button>
+    </div>
+</div>
+
+<script>
+const chatBox = document.getElementById("chatBox");
+const input = document.getElementById("userInput");
+
+// 🔥 LƯU LỊCH SỬ CHAT
+let messages = [];
+
+function addMessage(text, sender) {
+    const div = document.createElement("div");
+    div.className = "message " + sender;
+    div.textContent = text;
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
+    // Hiện tin nhắn user
+    addMessage(text, "user");
+
+    // Lưu vào history
+    messages.push({
+        role: "user",
+        content: text
+    });
+
+    input.value = "";
+
+    try {
+        const res = await fetch("http://127.0.0.1:8000/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                messages: messages   // ✅ QUAN TRỌNG
+            })
+        });
+
+        const data = await res.json();
+
+        if (!data.reply) {
+            addMessage("⚠️ Bot không trả lời được", "bot");
+            return;
+        }
+
+        // Hiện tin nhắn bot
+        addMessage(data.reply, "bot");
+
+        // Lưu reply vào history
+        messages.push({
+            role: "assistant",
+            content: data.reply
+        });
+
+    } catch (err) {
+        addMessage("❌ Không kết nối được server", "bot");
+    }
+}
+
+</script>
+
