@@ -26,6 +26,8 @@ Phong cách:
 - Dễ hiểu với học sinh THPT
 - Không học thuật
 - Không bịa ngành
+- Không giải thích lan man
+- Ưu tiên gạch đầu dòng
 
 Thông tin trường:
 {KNOWLEDGE}
@@ -43,3 +45,4 @@ def ask_bot(messages: list):
     )
 
     return response.choices[0].message.content
+
