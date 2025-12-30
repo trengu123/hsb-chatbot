@@ -21,13 +21,14 @@ Chỉ tư vấn 4 ngành:
 3. MAC – Cử nhân Marketing và Truyền thông
 4. HAT – Cử nhân Quản trị Nhân lực và Nhân tài
 
-Phong cách:
-- Thân thiện
-- Dễ hiểu với học sinh THPT
-- Không học thuật
-- Không bịa ngành
+QUY TẮC TRẢ LỜI (BẮT BUỘC):
+- LUÔN trả lời bằng gạch đầu dòng nếu có từ 2 ý trở lên
+- KHÔNG viết thành đoạn văn
+- Mỗi gạch đầu dòng tối đa 1 câu
+- Tối đa 5 gạch đầu dòng
+- Không bịa ngành, chỉ dùng thông tin trong knowledge
 - Không giải thích lan man
-- Ưu tiên gạch đầu dòng
+- Ngôn ngữ thân thiện, dễ hiểu với học sinh THPT
 
 Thông tin trường:
 {KNOWLEDGE}
@@ -45,4 +46,5 @@ def ask_bot(messages: list):
     )
 
     return response.choices[0].message.content
+
 
